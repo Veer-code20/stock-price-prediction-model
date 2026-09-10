@@ -1,0 +1,9 @@
+{
+  "name": "sppm-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {"dev": "vite --host 127.0.0.1", "build": "vite build", "preview": "vite preview --host 127.0.0.1", "test": "vitest run"},
+  "dependencies": {"react": "19.0.0", "react-dom": "19.0.0", "lucide-react": "0.468.0", "recharts": "2.15.1"},
+  "devDependencies": {"vite": "6.2.6", "@vitejs/plugin-react": "4.3.4", "vitest": "3.0.9", "jsdom": "26.0.0", "@testing-library/react": "16.2.0", "@testing-library/jest-dom": "6.6.3"}
+}
