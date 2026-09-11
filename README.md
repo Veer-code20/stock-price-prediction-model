@@ -1,112 +1,92 @@
-# Stock Price Prediction Model
+# SPPM — S&P 500 Market Dashboard
 
-This project began as a machine learning model for predicting Apple stock prices with historical Yahoo Finance data. The original experiment used a **Random Forest Regressor** to compare predicted prices against actual closing prices and generate a prediction chart.
+[![React](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
-It has since been upgraded into a full S&P 500 dashboard with live quote fetching, historical charts, search, watchlists, and a cleaner black/gray interface.
+SPPM started as a stock price prediction project and grew into a full-stack S&P 500 market dashboard. It lets users explore stocks, view historical price charts, build a personal watchlist, and experiment with research-focused price scenarios using Yahoo Finance market data.
 
-## Current Version
+## From Prediction Model to Price Estimator
 
-The active app is a React + FastAPI stock dashboard. The frontend is split into small components for display and hooks for catalog loading, quote refreshes, stock detail, forecasts, pagination, and watchlist storage.
+The original version of SPPM used a Random Forest model to experiment with stock price prediction. As the project grew, I shifted the focus from trying to predict an exact future price to building a larger market-data application.
 
-- Browse the S&P 500 instead of a small hardcoded stock list.
-- Search by symbol, company name, or sector.
-- View current prices and historical chart ranges.
-- Track a local browser watchlist.
-- Refresh visible prices quietly in the background.
-- Use green/red up-and-down price styling inspired by trading apps.
-- Estimate future prices with a weighted momentum and volatility baseline.
-- Run without activating a virtual environment.
+The current Price Estimator uses recent returns, longer-term price movement, and volatility to generate illustrative price scenarios across different time periods. It is meant for research and experimentation rather than as a guaranteed prediction or trading signal. The original Random Forest work is preserved in `archive/` as part of the project's history.
 
-## Project Layout
+## Tech Stack
+
+| Area | Technologies |
+| --- | --- |
+| Frontend | React 19, Vite 6, Recharts, Lucide React, JavaScript, CSS |
+| Backend | Python 3, FastAPI, Uvicorn, HTTPX |
+| Market Data | Yahoo Finance |
+| Testing | Vitest, Testing Library, Python `unittest` |
+
+## Project Structure
 
 ```text
 .
-├── backend/      FastAPI API, S&P 500 snapshot, market data, tests
-├── frontend/     React dashboard, modular components/hooks, styling, tests
-├── specs/        Specs for major dashboard and S&P 500 features
-├── archive/      Original ML experiment files and old project history
-├── README.md
-└── .gitignore
+├── backend/
+│   ├── app/
+│   │   ├── main.py       # FastAPI routes and validation
+│   │   ├── market.py     # Yahoo Finance requests, caching, and parsing
+│   │   ├── data.py       # Demo data and Price Estimator logic
+│   │   ├── universe.py   # S&P 500 universe loading
+│   │   └── sp500.json    # Bundled S&P 500 list
+│   ├── scripts/          # S&P 500 update utility
+│   └── tests/            # Backend tests
+├── frontend/
+│   ├── src/
+│   │   ├── components/   # Reusable UI components
+│   │   ├── hooks/        # Data, watchlist, pagination, and estimator logic
+│   │   ├── utils/        # Formatting helpers
+│   │   ├── constants.js  # Shared frontend constants
+│   │   └── App.jsx       # Main application layout and state
+│   └── package.json
+├── specs/                # Project specifications
+└── archive/              # Original prediction-model work
 ```
 
-## Run the Dashboard
+The frontend is split into reusable components and focused hooks, while the backend separates the API, market-data logic, estimator, and S&P 500 universe. This keeps the codebase easier to test, debug, and build on.
 
-Install dependencies:
+## Run Locally
+
+### Prerequisites
+
+- Python 3 with `pip`
+- Node.js with `npm`
+- Git
+
+### 1. Clone and install
 
 ```sh
-cd /Users/veerpatel/proj/sppm
+git clone https://github.com/Veer-code20/stock-price-prediction-model.git
+cd stock-price-prediction-model
+
 python3 -m pip install --user -r backend/requirements.txt
-
-cd frontend
-npm ci
+npm --prefix frontend ci
 ```
 
-Start the backend:
+### 2. Start the backend
+
+From the repository root:
 
 ```sh
-cd /Users/veerpatel/proj/sppm
 python3 -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8001
 ```
 
-Start the frontend in a second terminal:
+The API runs at `http://127.0.0.1:8001`.
+
+### 3. Start the frontend
+
+In a second terminal from the repository root:
 
 ```sh
-cd /Users/veerpatel/proj/sppm/frontend
-SPPM_API_URL=http://127.0.0.1:8001 npm run dev
+npm --prefix frontend run dev
 ```
 
-Open:
+Open `http://127.0.0.1:5173` in your browser.
 
-```text
-http://127.0.0.1:5173
-```
+## Disclaimer
 
-## Data
-
-The dashboard includes a bundled S&P 500 snapshot with 503 securities, stored in `backend/app/sp500.json`. The count is above 500 because the index includes multiple share classes.
-
-Refresh the S&P 500 snapshot:
-
-```sh
-python3 backend/scripts/update_sp500.py
-```
-
-Live prices and history use Yahoo Finance's public chart endpoint. The dashboard loads the full S&P 500 company list first, then fetches prices for the visible page, highlight row, and selected stock. Visible prices refresh quietly about every 5 minutes. Prices may be delayed, rate-limited, or temporarily unavailable.
-
-The price estimate uses weighted recent returns, longer trend context, and volatility to project 1 day, 1 week, 1 month, 3 months, 6 months, or 1 year ahead. It is a research estimate, not trading advice.
-
-## Original Model
-
-The original model files were moved out of the root and into `archive/` so the active codebase stays clean.
-
-- `archive/original-root/`: original local experiment files
-- `archive/github-root/`: files that used to sit at the GitHub repo root
-- `archive/original-project/`: older project folder
-
-The old experiment downloaded Apple stock data, trained a Random Forest model, generated predictions, and saved a plot. It is kept as project history, while the current dashboard lives in `backend/` and `frontend/`.
-
-## Verify
-
-Backend tests:
-
-```sh
-cd /Users/veerpatel/proj/sppm/backend
-python3 -m unittest discover -s tests -v
-```
-
-Frontend tests and build:
-
-```sh
-cd /Users/veerpatel/proj/sppm/frontend
-npm test
-npm run build
-```
-
-## Specs
-
-Specs are only used for major feature work:
-
-- `specs/001-dashboard/`
-- `specs/002-sp500/`
-
-Routine fixes, styling updates, and small cleanup changes do not need new specs.
+SPPM is a research and educational project. Yahoo Finance market data may be delayed, incomplete, rate-limited, or temporarily unavailable. Price Estimator outputs are illustrative scenarios only and are not financial advice or recommendations to buy or sell securities.
