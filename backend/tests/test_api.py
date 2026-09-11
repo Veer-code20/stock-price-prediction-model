@@ -23,14 +23,22 @@ class ContractTests(unittest.TestCase):
         self.assertEqual(short['history'], long['history'][-22:])
         self.assertEqual(short['history'][-1]['close'], short['stock']['price'])
         self.assertEqual(short['mode'], 'demo')
+        self.assertIn('fifty_two_week_high', short['stats'])
+        self.assertIn('fifty_two_week_low', short['stats'])
+
+    def test_ytd_range(self):
+        result = client.get('/api/stocks/AAPL?range=YTD').json()
+        self.assertGreaterEqual(len(result['history']), 1)
+        self.assertTrue(all(point['date'][:4] == result['history'][-1]['date'][:4] for point in result['history']))
 
     def test_forecast_contract(self):
-        for horizon in (5, 20, 60):
+        for horizon in (1, 5, 20, 60, 126, 252):
             result = client.post('/api/forecasts', json={'symbol':'MSFT', 'horizon':horizon}).json()
             self.assertEqual(len(result['points']), horizon)
             self.assertEqual(result['symbol'], 'MSFT')
             self.assertEqual(result['mode'], 'demo')
             self.assertIn('not a trained forecast', result['note'])
+            self.assertEqual(result['method'], 'Weighted momentum and volatility estimate')
             self.assertTrue(all(p['lower'] < p['price'] < p['upper'] for p in result['points']))
             dates = [p['date'] for p in result['points']]
             self.assertEqual(dates, sorted(set(dates)))

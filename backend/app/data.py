@@ -45,14 +45,29 @@ def stocks():
 
 def forecast(symbol, horizon, past=None, mode='demo'):
     past = history(symbol) if past is None else past
-    last = past[-1]['close']
-    drift = (last/past[-21]['close']-1)/20
+    closes = [point['close'] for point in past if point.get('close') and point['close'] > 0]
+    last = closes[-1]
+    returns = [math.log(closes[i] / closes[i-1]) for i in range(1, len(closes))]
+    recent = returns[-60:] or returns
+    short = returns[-20:] or recent
+    long = returns[-126:] or recent
+    weights = [i + 1 for i in range(len(short))]
+    short_mean = sum(value * weight for value, weight in zip(short, weights)) / sum(weights)
+    recent_mean = sum(recent) / len(recent)
+    long_mean = sum(long) / len(long)
+    blended = .55 * short_mean + .30 * recent_mean + .15 * long_mean
+    variance = sum((value - recent_mean) ** 2 for value in recent) / max(1, len(recent) - 1)
+    volatility = math.sqrt(variance)
+    annualized_volatility = volatility * math.sqrt(252)
+    trend_cap = max(.0015, min(.012, annualized_volatility / 252))
+    drift = max(min(blended * .55, trend_cap), -trend_cap)
     days = weekdays(date.fromisoformat(past[-1]['date'])+timedelta(days=1), horizon)
     points = []
     for i, day in enumerate(days, 1):
-        price = last*(1+drift*i)
-        width = last*.012*math.sqrt(i)
-        points.append(dict(date=day, price=round(price, 2), lower=round(price-width, 2), upper=round(price+width, 2)))
-    return dict(mode=mode, symbol=symbol, horizon=horizon, method='Illustrative trend extrapolation',
+        mean_reversion = .985 ** i
+        price = last * math.exp(drift * i * mean_reversion)
+        width = price * max(.015, volatility * math.sqrt(i) * 1.35)
+        points.append(dict(date=day, price=round(price, 2), lower=round(max(.01, price-width), 2), upper=round(price+width, 2)))
+    return dict(mode=mode, symbol=symbol, horizon=horizon, method='Weighted momentum and volatility estimate',
                 last_price=last, projected_price=points[-1]['price'], points=points,
-                note='Illustrative trend and bounds. This is not a trained forecast or a calibrated confidence interval.')
+                note='Uses weighted recent returns, longer trend context, and volatility. This is not a trained forecast or a calibrated confidence interval.')

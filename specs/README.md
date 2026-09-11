@@ -5,7 +5,7 @@ Use SDD for major features or substantial changes in product behavior. Do not cr
 ## Current specs
 
 1. [Dashboard](001-dashboard/spec.md): the original workspace, visual redesign, charts, watchlists, market-data integration, and illustrative forecasts.
-2. [S&P 500](002-sp500/spec.md): index membership, full-catalog search, pagination, and bounded quote fetching.
+2. [S&P 500](002-sp500/spec.md): S&P 500 company membership, full-catalog search, pagination, and bounded quote fetching.
 
 ## Future major features
 

@@ -6,14 +6,15 @@ It has since been upgraded into a full S&P 500 dashboard with live quote fetchin
 
 ## Current Version
 
-The active app is a React + FastAPI stock dashboard.
+The active app is a React + FastAPI stock dashboard. The frontend is split into small components for display and hooks for catalog loading, quote refreshes, stock detail, forecasts, pagination, and watchlist storage.
 
 - Browse the S&P 500 instead of a small hardcoded stock list.
 - Search by symbol, company name, or sector.
 - View current prices and historical chart ranges.
 - Track a local browser watchlist.
-- Refresh visible prices automatically every 60 seconds.
+- Refresh visible prices quietly in the background.
 - Use green/red up-and-down price styling inspired by trading apps.
+- Estimate future prices with a weighted momentum and volatility baseline.
 - Run without activating a virtual environment.
 
 ## Project Layout
@@ -21,7 +22,7 @@ The active app is a React + FastAPI stock dashboard.
 ```text
 .
 ├── backend/      FastAPI API, S&P 500 snapshot, market data, tests
-├── frontend/     React dashboard, styling, frontend tests
+├── frontend/     React dashboard, modular components/hooks, styling, tests
 ├── specs/        Specs for major dashboard and S&P 500 features
 ├── archive/      Original ML experiment files and old project history
 ├── README.md
@@ -70,7 +71,9 @@ Refresh the S&P 500 snapshot:
 python3 backend/scripts/update_sp500.py
 ```
 
-Live prices and history use Yahoo Finance's public chart endpoint. The dashboard loads the full S&P 500 company list first, then fetches prices for the visible page, highlight row, and selected stock. Prices may be delayed, rate-limited, or temporarily unavailable.
+Live prices and history use Yahoo Finance's public chart endpoint. The dashboard loads the full S&P 500 company list first, then fetches prices for the visible page, highlight row, and selected stock. Visible prices refresh quietly about every 5 minutes. Prices may be delayed, rate-limited, or temporarily unavailable.
+
+The price estimate uses weighted recent returns, longer trend context, and volatility to project 1 day, 1 week, 1 month, 3 months, 6 months, or 1 year ahead. It is a research estimate, not trading advice.
 
 ## Original Model
 
