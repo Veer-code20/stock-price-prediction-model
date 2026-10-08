@@ -1,4 +1,5 @@
 # SPPM — S&P 500 Market Dashboard
+**[Live Demo](https://sppm.vpatel2006.chatgpt.site)**
 
 [![React](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61DAFB)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
