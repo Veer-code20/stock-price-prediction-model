@@ -1,10 +1,11 @@
 # SPPM — S&P 500 Market Dashboard
-**[Live Demo](https://sppm.vpatel2006.chatgpt.site)**
-
 [![React](https://img.shields.io/badge/React-19-20232a?logo=react&logoColor=61DAFB)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)](https://vite.dev/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![Python](https://img.shields.io/badge/Python-3-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+
+**[Live Demo](https://sppm.vpatel2006.chatgpt.site)**
+
 
 SPPM started as a stock price prediction project and grew into a full-stack S&P 500 market dashboard. It lets users explore stocks, view historical price charts, build a personal watchlist, and experiment with research-focused price scenarios using Yahoo Finance market data.
 
