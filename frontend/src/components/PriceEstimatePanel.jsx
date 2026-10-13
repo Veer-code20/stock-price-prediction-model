@@ -17,6 +17,7 @@ export default function PriceEstimatePanel({
 }) {
   const last = forecast?.points.at(-1);
   const inline = variant === 'inline';
+  const trained = forecast?.validation;
   const warning = 'For learning and comparison only. This estimate is not financial advice, not a recommendation to buy or sell, and should not be used to make real investing decisions.';
 
   return <section className={`panel forecast-panel ${variant === 'inline' ? 'inline-estimate' : ''} ${open ? '' : 'collapsed'}`}>
@@ -40,15 +41,17 @@ export default function PriceEstimatePanel({
           </select>
         </div>
         <button className="primary" onClick={generateForecast} disabled={!detail || forecastStatus === 'loading'}>
-          {forecastStatus === 'loading' ? 'Estimating…' : 'Estimate'}<ArrowRight size={17}/>
+          {forecastStatus === 'loading' ? 'Computing…' : detail?.mode === 'market' ? 'Predict' : 'Estimate'}<ArrowRight size={17}/>
         </button>
       </div>
       <div aria-live="polite">
         {forecastError && <Failure text={forecastError} retry={generateForecast}/>} 
         {forecast && <div className="forecast-result">
-          <div><span>{forecast.symbol} · {horizonLabel(forecast.horizon)}</span><strong>{money(forecast.projected_price)}</strong><small>Estimated price</small></div>
-          <div><span>Possible range</span><strong className="bounds">{money(last.lower)}–{money(last.upper)}</strong><small>Rough trend range</small></div>
+          <div><span>{forecast.symbol} · {horizonLabel(forecast.horizon)}</span><strong>{money(forecast.projected_price)}</strong><small>{trained ? 'Model predicted price' : 'Demo estimated price'}</small></div>
+          <div><span>Lower estimate</span><strong className="bounds">{money(last.lower)}</strong><small>If the price lands lower</small></div>
+          <div><span>Higher estimate</span><strong className="bounds">{money(last.upper)}</strong><small>If the price lands higher</small></div>
         </div>}
+        {forecast?.mode === 'demo' && <div className="forecast-note"><p>Synthetic demo estimate. No trained-model performance is measured in demo mode.</p></div>}
       </div>
       <div className="forecast-note warning-note"><ShieldAlert size={15}/><p>{warning}</p></div>
     </div>}

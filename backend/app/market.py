@@ -10,6 +10,32 @@ from .universe import MEMBERS
 _cache = {}
 _locks = {(symbol, intraday): Lock() for symbol in MEMBERS for intraday in (False, True)}
 CACHE_TTL_SECONDS = 295
+_training_lock = Lock()
+
+
+def training_history(symbol):
+    """Separate split-adjusted, completed daily history for model training."""
+    key = (symbol, 'training')
+    with _training_lock:
+        cached = _cache.get(key)
+        if cached and time.monotonic() - cached[0] < CACHE_TTL_SECONDS:
+            return cached[1]
+        try:
+            response = httpx.get(f'https://query1.finance.yahoo.com/v8/finance/chart/{symbol.replace(chr(46), chr(45))}',
+                params={'range': '5y', 'interval': '1d'}, headers={'User-Agent': 'Mozilla/5.0'}, timeout=8)
+            response.raise_for_status()
+            raw = response.json()['chart']['result'][0]
+            closes = raw['indicators']['quote'][0]['close']
+            # Yahoo daily closes are split-adjusted. Exclude today's incomplete bar.
+            today = datetime.now(timezone.utc).date().isoformat()
+            points = [{'date': iso(t)[:10], 'close': float(c)} for t, c in zip(raw['timestamp'], closes)
+                      if number(c) and c > 0 and iso(t)[:10] < today]
+            if not points:
+                raise ValueError('Empty training history')
+        except (httpx.HTTPError, KeyError, IndexError, TypeError, ValueError) as error:
+            raise ValueError('Training history unavailable. Try again shortly.') from error
+        _cache[key] = (time.monotonic(), points)
+        return points
 
 
 def iso(timestamp):

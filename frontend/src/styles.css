@@ -209,7 +209,7 @@ h2 { margin: 0; font-size: 15px; font-weight: 500; letter-spacing: -.2px; }
 select { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 4px; background: #141414; color: #ddd; font-size: 11px; }
 .primary { display: flex; align-items: center; justify-content: center; gap: 18px; min-height: 40px; padding: 13px 18px; border: 0; border-radius: 4px; background: #eee; color: #101010; font-size: 11px; font-weight: 600; }
 .primary:hover { background: #fff; }
-.forecast-result { display: flex; gap: 30px; margin: 22px 18px 0; padding-top: 20px; border-top: 1px solid var(--border); }
+.forecast-result { display: flex; flex-wrap: wrap; gap: 30px; margin: 22px 18px 0; padding-top: 20px; border-top: 1px solid var(--border); }
 .forecast-result span, .forecast-result small { display: block; color: #999; font-size: 9px; }
 .forecast-result strong { display: block; margin: 8px 0; color: #eee; font-size: 25px; font-weight: 400; }
 .forecast-result .bounds { margin: 14px 0; font-size: 17px; }

@@ -19,6 +19,28 @@ beforeEach(() => {
 });
 afterEach(() => {cleanup(); vi.useRealTimers(); vi.unstubAllGlobals();});
 describe('Market workspace acceptance', () => {
+  it('shows trained predictions without the technical explanation', async () => {
+    const normalFetch = globalThis.fetch;
+    vi.stubGlobal('fetch', vi.fn((url, options) => {
+      if (url.startsWith('/api/stocks/')) return response({...detail('AAPL'), mode: 'market'});
+      if (url === '/api/forecasts') return response({symbol: 'AAPL', horizon: 20, mode: 'market',
+        method: 'Random Forest future-return prediction', training_end: '2025-01-02',
+        projected_price: 210, points: [{lower: 195, upper: 225}],
+        validation: {model_mae: 12, baseline_mae: 10, samples: 300, beats_baseline: false},
+        note: 'Historical results do not establish future accuracy.'});
+      return normalFetch(url, options);
+    }));
+    render(<App/>);
+    await screen.findByRole('button', {name: /AAPL Apple Inc/});
+    openEstimator();
+    fireEvent.click(screen.getByRole('button', {name: 'Predict'}));
+    expect(await screen.findByText('Model predicted price')).toBeInTheDocument();
+    expect(screen.getByText('Lower estimate')).toBeInTheDocument();
+    expect(screen.getByText('Higher estimate')).toBeInTheDocument();
+    expect(screen.queryByText(/Average past error/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/No improvement over/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Trained through/)).not.toBeInTheDocument();
+  });
   it('searches by company name and explains empty results', async () => {
     render(<App/>);
     await screen.findByRole('button',{name:/AAPL Apple Inc/});

@@ -2,7 +2,7 @@ import os
 from typing import Literal
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from . import data, market
+from . import data, market, prediction
 from .universe import MEMBERS, SNAPSHOT
 
 Range = Literal['1D', '1W', '1M', '3M', '1Y', 'YTD']
@@ -109,7 +109,8 @@ def create_forecast(request: ForecastRequest):
     stock = get_stock(request.symbol)
     if demo():
         return data.forecast(stock['symbol'], request.horizon)
-    result = live_detail(stock['symbol'])
-    if len(result['history']) < 21:
-        raise HTTPException(status_code=503, detail='Not enough history for a price scenario.')
-    return data.forecast(stock['symbol'], request.horizon, past=result['history'], mode='market')
+    live_detail(stock['symbol'])
+    try:
+        return prediction.forecast(stock['symbol'], request.horizon, market.training_history(stock['symbol']))
+    except ValueError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
