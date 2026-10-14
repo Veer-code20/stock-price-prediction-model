@@ -8,16 +8,6 @@
 
 SPPM started as a stock price prediction project and grew into a full-stack S&P 500 market dashboard. It lets users explore stocks, view historical price charts, build a personal watchlist, and generate experimental trained price forecasts using Yahoo Finance market data.
 
-## Trained Price Forecasts
-
-In market mode, the Price Estimator now trains a Random Forest to predict the stock's future log return for the selected horizon (1, 5, 20, 60, 126, or 252 trading observations). It uses five years of Yahoo Finance split-adjusted daily closes, excludes today's bar, and builds features from past returns, moving-average distance, and volatility. Forecasts start from the latest completed daily close, rather than an intraday quote. Stocks with insufficient history return an explicit error.
-
-Each response reports price MAE and RMSE against an unchanged-price baseline using three expanding chronological test folds. A horizon-sized gap keeps training outcomes before each test period. The model is then refit on all available labeled examples to predict the selected horizon. The API includes whether the model beat the baseline; these historical scores do not establish future accuracy. Test outcomes overlap, especially for longer horizons, and are not independent observations.
-
-The endpoint returns one horizon-end prediction, not a fabricated daily path. Its range comes from the 10th–90th percentiles of historical log-return residuals; it is not a guaranteed confidence interval and need not contain the point prediction. Future dates count weekdays and do not account for exchange holidays. Hyperparameters are fixed rather than tuned on the evaluation folds. Training results are cached in a bounded in-memory cache.
-
-Demo mode retains the synthetic formula-based estimator and does not claim trained-model performance. The original archived Random Forest included its target closing price among its input features and randomly split dates, so its scores did not evaluate future-price prediction. It is retained only as project history.
-
 ## Tech Stack
 
 | Area | Technologies |
