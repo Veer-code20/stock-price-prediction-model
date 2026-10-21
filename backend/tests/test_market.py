@@ -32,6 +32,7 @@ class MarketTests(unittest.TestCase):
     def test_daily_change_uses_previous_session_not_range_start(self):
         result = market.parse(payload(), 'AAPL')
         self.assertEqual(result['stock']['change_pct'], 10)
+        self.assertEqual(result['stock']['change'], 10)
         self.assertEqual(result['stats']['open'], 101)
         self.assertEqual(result['stats']['fifty_two_week_high'], 125)
         self.assertEqual(result['stats']['fifty_two_week_low'], 85)

@@ -64,7 +64,7 @@ function StockRow({ item, selected, selectStock }) {
   return <button className={`stock-row ${selected ? 'selected' : ''}`} aria-pressed={selected} onClick={() => selectStock(item.symbol)}>
     <span className={`company-icon icon-${item.symbol.charCodeAt(0) % 4}`}>{item.symbol.slice(0, 1)}</span>
     <span className="company-text"><strong>{item.symbol}</strong><small>{item.name}</small></span>
-    <span className="row-price"><strong>{money(item.price)}</strong><Change value={item.change_pct} status={item.quote_status}/></span>
+    <span className="row-price"><strong>{money(item.price)}</strong><Change value={item.change_pct} amount={item.change} status={item.quote_status}/></span>
   </button>;
 }
 

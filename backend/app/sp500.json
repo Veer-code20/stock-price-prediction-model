@@ -1,6 +1,6 @@
 {
   "source": "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv",
-  "retrieved_at": "2026-09-10T22:45:09.696726+00:00",
+  "retrieved_at": "2026-10-21T22:41:29.771121+00:00",
   "items": [
     {
       "symbol": "A",
@@ -283,6 +283,11 @@
       "sector": "Health Care"
     },
     {
+      "symbol": "BE",
+      "name": "Bloom Energy",
+      "sector": "Industrials"
+    },
+    {
       "symbol": "BEN",
       "name": "Franklin Resources",
       "sector": "Financials"
@@ -311,11 +316,6 @@
       "symbol": "BKR",
       "name": "Baker Hughes",
       "sector": "Energy"
-    },
-    {
-      "symbol": "BLDR",
-      "name": "Builders FirstSource",
-      "sector": "Industrials"
     },
     {
       "symbol": "BLK",
@@ -606,11 +606,6 @@
       "symbol": "CTSH",
       "name": "Cognizant",
       "sector": "Information Technology"
-    },
-    {
-      "symbol": "CTVA",
-      "name": "Corteva",
-      "sector": "Materials"
     },
     {
       "symbol": "CVNA",
@@ -1218,6 +1213,11 @@
       "sector": "Materials"
     },
     {
+      "symbol": "ILMN",
+      "name": "Illumina, Inc.",
+      "sector": "Health Care"
+    },
+    {
       "symbol": "INCY",
       "name": "Incyte",
       "sector": "Health Care"
@@ -1494,7 +1494,7 @@
     },
     {
       "symbol": "MCK",
-      "name": "McKesson Corporation",
+      "name": "McKesson",
       "sector": "Health Care"
     },
     {
@@ -1768,6 +1768,11 @@
       "sector": "Energy"
     },
     {
+      "symbol": "P",
+      "name": "Everpure",
+      "sector": "Information Technology"
+    },
+    {
       "symbol": "PANW",
       "name": "Palo Alto Networks",
       "sector": "Information Technology"
@@ -1886,11 +1891,6 @@
       "symbol": "PSA",
       "name": "Public Storage",
       "sector": "Real Estate"
-    },
-    {
-      "symbol": "PSKY",
-      "name": "Paramount Skydance Corporation",
-      "sector": "Communication Services"
     },
     {
       "symbol": "PSX",
@@ -2023,6 +2023,11 @@
       "sector": "Consumer Staples"
     },
     {
+      "symbol": "SKYD",
+      "name": "Skydance Corporation",
+      "sector": "Communication Services"
+    },
+    {
       "symbol": "SLB",
       "name": "Schlumberger",
       "sector": "Energy"
@@ -2133,11 +2138,6 @@
       "sector": "Communication Services"
     },
     {
-      "symbol": "TAP",
-      "name": "Molson Coors Beverage Company",
-      "sector": "Consumer Staples"
-    },
-    {
       "symbol": "TDG",
       "name": "TransDigm Group",
       "sector": "Industrials"
@@ -2243,14 +2243,14 @@
       "sector": "Industrials"
     },
     {
-      "symbol": "TTD",
-      "name": "Trade Desk (The)",
-      "sector": "Communication Services"
-    },
-    {
       "symbol": "TTWO",
       "name": "Take-Two Interactive",
       "sector": "Communication Services"
+    },
+    {
+      "symbol": "TWLO",
+      "name": "Twilio",
+      "sector": "Information Technology"
     },
     {
       "symbol": "TXN",
@@ -2388,6 +2388,11 @@
       "sector": "Health Care"
     },
     {
+      "symbol": "VYLR",
+      "name": "Vylor",
+      "sector": "Consumer Staples"
+    },
+    {
       "symbol": "VZ",
       "name": "Verizon",
       "sector": "Communication Services"
@@ -2401,11 +2406,6 @@
       "symbol": "WAT",
       "name": "Waters Corporation",
       "sector": "Health Care"
-    },
-    {
-      "symbol": "WBD",
-      "name": "Warner Bros. Discovery",
-      "sector": "Communication Services"
     },
     {
       "symbol": "WDAY",

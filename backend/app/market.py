@@ -89,7 +89,7 @@ def parse(payload, symbol, intraday=False):
     return {'mode': 'market', 'source': 'Yahoo Finance', 'fetched_at': iso(time.time()),
             'quote_at': iso(meta['regularMarketTime']),
             'stock': dict(symbol=symbol, name=row['name'], sector=row['sector'], price=price,
-                          change_pct=round((price / previous - 1) * 100, 2)),
+                          change=round(price - previous, 2), change_pct=round((price / previous - 1) * 100, 2)),
             'history': points,
             'stats': dict(open=next((v for v in reversed(quote.get('open', [])) if number(v)), None),
                           high=meta.get('regularMarketDayHigh'), low=meta.get('regularMarketDayLow'),
@@ -157,6 +157,6 @@ def quotes(symbols):
             result = chart(symbol)
             return dict(result['stock'], quote_at=result['quote_at'], quote_status='ready')
         except ValueError:
-            return dict(MEMBERS[symbol], price=None, change_pct=None, quote_status='unavailable')
+            return dict(MEMBERS[symbol], price=None, change=None, change_pct=None, quote_status='unavailable')
     with ThreadPoolExecutor(max_workers=4) as pool:
         return list(pool.map(fetch, symbols))

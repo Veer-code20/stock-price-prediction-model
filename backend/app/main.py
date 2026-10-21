@@ -57,7 +57,7 @@ def health():
 @app.get('/api/stocks')
 def list_stocks(q: str = ''):
     query = q.strip().lower()
-    items = data.stocks() if demo() else [dict(row, price=None, change_pct=None, quote_status='pending') for row in MEMBERS.values()]
+    items = data.stocks() if demo() else [dict(row, price=None, change=None, change_pct=None, quote_status='pending') for row in MEMBERS.values()]
     return {'mode': 'demo' if demo() else 'market', 'source': 'Synthetic data' if demo() else 'Yahoo Finance',
             'universe': 'demo' if demo() else 'S&P 500', 'membership_updated_at': SNAPSHOT['retrieved_at'],
             'items': [s for s in items if matches(s, query)]}

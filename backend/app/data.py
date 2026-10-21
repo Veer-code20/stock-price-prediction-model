@@ -39,7 +39,8 @@ def stocks():
     for symbol, name, sector, price in CATALOG:
         points = history(symbol)
         change = (points[-1]['close']/points[-2]['close']-1)*100
-        result.append(dict(symbol=symbol, name=name, sector=sector, price=price, change_pct=round(change, 2)))
+        result.append(dict(symbol=symbol, name=name, sector=sector, price=price,
+                           change=round(price - points[-2]['close'], 2), change_pct=round(change, 2)))
     return result
 
 

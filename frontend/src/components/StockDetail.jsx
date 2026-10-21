@@ -16,6 +16,7 @@ export default function StockDetail({ detailError, retryDetail, detail, symbol, 
   const stock = detail.stock;
   const chartColor = detail.history.at(-1).close < detail.history[0].close ? '#ff5c5c' : '#00c805';
   const rangeChange = detail.history.length > 1 ? (detail.history.at(-1).close / detail.history[0].close - 1) * 100 : stock.change_pct;
+  const rangeAmount = detail.history.length > 1 ? detail.history.at(-1).close - detail.history[0].close : stock.change;
   const saved = watchlist.includes(symbol);
 
   return <section className="panel stock-detail" aria-label="Selected stock">
@@ -26,7 +27,7 @@ export default function StockDetail({ detailError, retryDetail, detail, symbol, 
       </button>
     </div>
     <div className="price-heading">
-      <div><strong>{money(stock.price)}</strong><Change value={rangeChange}/><small>{detail.mode === 'demo' ? `${range} sample change` : `${range} range change`}</small></div>
+      <div><strong>{money(stock.price)}</strong><Change value={rangeChange} amount={rangeAmount}/><small>{detail.mode === 'demo' ? `${range} sample change` : `${range} range change`}</small></div>
       <div className="range-control" aria-label="History range">{['1D', '1W', '1M', '3M', '1Y', 'YTD'].map(item => <button key={item} aria-pressed={range === item} className={range === item ? 'chosen' : ''} onClick={() => setRange(item)}>{item}</button>)}</div>
     </div>
     <div className="chart" role="img" aria-label={`${stock.symbol} ${detail.mode === 'demo' ? 'synthetic' : 'market'} ${range} closing prices, from ${money(detail.history[0].close)} to ${money(stock.price)}.`}>

@@ -20,7 +20,7 @@ export function useQuotes(feed, quoteSymbols) {
         }
       } catch (error) {
         if (error.name !== 'AbortError' && !controller.signal.aborted) {
-          const unavailable = quoteSymbols.split(',').map(symbol => [symbol, { price: null, change_pct: null, quote_status: 'unavailable' }]);
+          const unavailable = quoteSymbols.split(',').map(symbol => [symbol, { price: null, change: null, change_pct: null, quote_status: 'unavailable' }]);
           setQuotes(current => ({ ...current, ...Object.fromEntries(unavailable) }));
         }
       } finally {
